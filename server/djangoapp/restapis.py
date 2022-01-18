@@ -1,5 +1,6 @@
 import requests
 import json
+import ibm_watson
 # import related models here
 from requests.auth import HTTPBasicAuth
 from . import models
