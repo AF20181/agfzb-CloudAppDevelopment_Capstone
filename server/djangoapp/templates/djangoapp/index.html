@@ -53,7 +53,7 @@
             {% if user.is_authenticated %}
               <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success" role="button" aria-disabled="false">Review now</a></td>
             {% else %}
-            <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Login or Signup to write a review!">
+            <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-bs-content="Login or Signup to write a review!">
               <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success disabled" role="button" aria-disabled="true">Review now</a></td>
             </div>
             {% endif %}
