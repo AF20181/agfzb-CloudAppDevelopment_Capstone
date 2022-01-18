@@ -61,9 +61,9 @@ def post_request(url, json_payload, **kwargs):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a CarDealer object list
 
-def get_dealers_from_cf(url, state=None):
+def get_dealers_from_cf(url, state=None, dealerID=None):
     results = []
-    json_result = get_request(url, state, id)
+    json_result = get_request(url, state, dealerID)
     if json_result:
         if state:
             dealers = json_result["body"]["docs"]
@@ -81,13 +81,23 @@ def get_dealers_from_cf(url, state=None):
                     zip=dealer["zip"]
                 )
                 results.append(dealer_obj)
-        #elif id:
-        #        dealers = json_result["rows"]
-        #        for dealer in dealers:
-        #            dealer_obj = models.CarDealer(
-        #            id=dealer["id"],
-        #            )
-        #        results.append(dealer_obj)
+        elif dealerID:
+                dealers = json_result["body"]["rows"]
+                for dealer in dealers:
+                    dealer_doc = dealer["doc"]
+                    dealer_obj = models.CarDealer(
+                        address=dealer_doc["address"],
+                        city=dealer_doc["city"],
+                        full_name=dealer_doc["full_name"],
+                        id=dealer_doc["id"],
+                        lat=dealer_doc["lat"],
+                        lng=dealer_doc["long"],
+                        short_name=dealer_doc["short_name"],
+                        st=dealer_doc["st"],
+                        state=dealer_doc["state"],
+                        zip=dealer_doc["zip"]
+                    )
+                results.append(dealer_obj)
         else:
             dealers = json_result["body"]["rows"]
             for dealer in dealers:

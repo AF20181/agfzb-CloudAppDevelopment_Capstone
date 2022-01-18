@@ -10,37 +10,57 @@
 <body>
   {% include "djangoapp/nav.html" %}
   <main class="container">
-      <div class="row g-2 align-items-center">
-        <div class="col-auto">
-          <h1>Dealer Reviews</h2>
-          <p><b>{{dealer.full_name}}</b></p>
-          <p>{{dealer.address}}</p>
-          <p>{{dealer.city}} {{dealer.zip}}</p>
-          {% if user.is_authenticated %}
-            <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success" role="button" aria-disabled="false">Review now</a></td>
-          {% else %}
-          <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-bs-content="Login or Signup to write a review!">
-            <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success disabled" role="button" aria-disabled="true">Review now</a></td>
+    <div class="row justify-content-center pt-5 px-5">
+      <div class="col-auto alert alert-info px-5">
+        <h1>Reviews for {{dealers.0.full_name}}</h2>
+          <p>{{dealers.0.address}}<br/>
+            {{dealers.0.city}} {{dealers.0.zip}}</p>
+            {% if user.is_authenticated %}
+            <a href="/djangoapp/review/{{dealers.0.id}}/" class="btn btn-success" role="button" aria-disabled="false">Write a review</a></td>
+            {% else %}
+            <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-bs-content="Login or Signup to write a review!">
+              <a href="/djangoapp/review/{{dealers.0.id}}/" class="btn btn-success disabled" role="button" aria-disabled="true">Write a review</a></td>
+            </div>
+            {% endif %}
           </div>
-          {% endif %}   
         </div>
-      </div>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 pt-5 py-5">
-      {% for review in reviews %}
-      <div class="col">
-      <div class="card h-100">
-        <img src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" class="card-img-top" alt="">
-        <div class="card-body">
-          <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
-          <p class="card-text">{{ review.car_year }}</p>
-          <p class="card-text">{{ review.review }}</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+        {% if reviews %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5 pt-5 py-5 justify-content-center">
+          {% for review in reviews %}
+          <div class="col">
+            <div class="card h-100">
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                <img src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png" width="80" height="80" alt="review.sentiment">
+                <span class="visually-hidden">unread messages</span>
+              </span>
+              <img src="{{MEDIA_URL}}/car.jpg" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
+                <p class="card-text">{{ review.car_year }}</p>
+                <p class="card-text">{{ review.review }}</p>
+              </div>
+              <div class="card-footer"><small style="font-size:10px">Foto von Torsten Dettlaff von Pexels</small></div>
+            </div>
+          </div>
+          {% endfor %}
         </div>
-      </div>
-    </div>
-      {% endfor %}
-    </div>
-  </main>
-</body>
-{% include "djangoapp/scripts.html" %}
-</html>
+        {% else %}
+        {% if not user.is_authenticated %}
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-8 col-md-6 col-xl-4">
+            {% include "djangoapp/login_form_raw.html" %}
+          </div>
+        </div>
+        {% endif %}
+        {% endif %}
+      </main>
+    </body>
+    {% include "djangoapp/scripts.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl)
+    })
+    </script>
+    </html>

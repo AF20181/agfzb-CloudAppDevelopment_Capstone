@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
+  <div class="container">
     <a class="navbar-brand" href="/djangoapp">Best Cars</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -13,6 +13,7 @@
           <a class="nav-link" href="/djangoapp/about">About Us</a>
         </li>
       </ul>
+      {% if 'login' in request.path or 'signup' in request.path%}{% else %}
       <ul class="nav navbar-nav mr-auto">
         {% if user.is_authenticated %}
         <li>
@@ -20,8 +21,9 @@
           <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
         </li>
         {% else %}
+        {% if 'dealer' in request.path and reviews|length == 0 %}{% else %}
         <li>
-          <form class="form-inline" action="/djangoapp/login/" method="post">
+          <form class="form-inline" action="{% url 'djangoapp:login' %}?next={{request.path}}" method="post">
             {% csrf_token %}
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Username" name="username" >
@@ -32,7 +34,9 @@
           </form>
         </li>
         {% endif %}
+        {% endif %}
       </ul>
+      {% endif %}
     </div>
   </div>
 </nav>

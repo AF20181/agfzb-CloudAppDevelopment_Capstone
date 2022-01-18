@@ -37,7 +37,7 @@ def login_request(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('djangoapp:index')
+            return redirect(request.GET.get('next'))
         else:
             context['message'] = "Invalid username or password."
             return render(request, 'djangoapp/login.html', context)
@@ -93,7 +93,10 @@ def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
         dealerid = dealer_id
-        context = {"reviews":  restapis.get_dealer_reviews_by_id_from_cf('https://3faef1d1.eu-de.apigw.appdomain.cloud/api/get_reviews?dealerId={0}'.format(dealerid), dealerid)}
+        context = {
+            "reviews": restapis.get_dealer_reviews_by_id_from_cf('https://3faef1d1.eu-de.apigw.appdomain.cloud/api/get_reviews?dealerId={0}'.format(dealerid), dealerid),
+            "dealers": restapis.get_dealers_from_cf('https://3faef1d1.eu-de.apigw.appdomain.cloud/api/get_dealerships?id={0}'.format(dealerid),dealerid),
+        }
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review

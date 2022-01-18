@@ -7,90 +7,90 @@
 </head>
 <body>
   {% include "djangoapp/nav.html" %}
-  <main class="container-fluid">
+  <main class="container">
     <!--Add a dealer table here -->
-    <div class="table-responsive-md">
-    <table class="table table-success table-hover" id="table">
-      <div class="row g-2 align-items-center">
-        <div class="col-auto">
-          <label for="inputPassword6" class="col-form-label">Search:</label>
+    <div class="table-responsive-md pt-5">
+      <table class="table table-success table-hover" id="table">
+        <div class="row g-2 align-items-center">
+          <div class="col-auto">
+            <label for="tableSearch" class="col-form-label">Search:</label>
+          </div>
+          <div class="col-12 col-md-6 col-xl-3">
+            <input class="my-2 form-control search-input mr-auto" type="text" id="tableSearch" onkeyup="tableSearch()" placeholder="Search for Dealer names..">
+          </div>
+          <div class="col-auto">
+            <span id="passwordHelpInline" class="form-text">
+              ...get your car from best cars.
+            </span>
+          </div>
         </div>
-        <div class="col-auto">
-          <input class="my-2 form-control search-input mr-auto" type="text" id="tableSearch" onkeyup="tableSearch()" placeholder="Search for Dealer names..">
-        </div>
-        <div class="col-auto">
-          <span id="passwordHelpInline" class="form-text">
-            ...get your car from best cars.
-          </span>
-        </div>
-      </div>
-      {% if 'state' in request.GET %}
-      <caption class="mx-auto text-center"><a href="/djangoapp/">Show all</a></caption>
-      {% else %}
-      <caption>List of Car Dealer</caption>
-      {% endif %}
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Dealer Name</th>
-          <th scope="col">City</th>
-          <th scope="col">Address</th>
-          <th scope="col">Zip</th>
-          <th scope="col">State</th>
-          <th scope="col">Review</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for dealer in dealerships%}
-        <tr>
-          <th scope="row">{{dealer.id}}</th>
-          <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
-          <td>{{dealer.city}}</td>
-          <td>{{dealer.address}}</td>
-          <td>{{dealer.zip}}</td>
-          <td><a href="{% url 'djangoapp:index' %}?state={{dealer.st}}">{{dealer.state}}</a></td>
-          <td class="text-center">
-            {% if user.is_authenticated %}
+        {% if 'state' in request.GET %}
+        <caption class="mx-auto text-center"><a href="/djangoapp/">Show all</a></caption>
+        {% else %}
+        <caption>List of Car Dealer</caption>
+        {% endif %}
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Dealer Name</th>
+            <th scope="col">City</th>
+            <th scope="col">Address</th>
+            <th scope="col">Zip</th>
+            <th scope="col">State</th>
+            <th scope="col">Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dealer in dealerships%}
+          <tr>
+            <th scope="row">{{dealer.id}}</th>
+            <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+            <td>{{dealer.city}}</td>
+            <td>{{dealer.address}}</td>
+            <td>{{dealer.zip}}</td>
+            <td><a href="{% url 'djangoapp:index' %}?state={{dealer.st}}">{{dealer.state}}</a></td>
+            <td class="text-center">
+              {% if user.is_authenticated %}
               <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success" role="button" aria-disabled="false">Review now</a></td>
-            {% else %}
-            <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-bs-content="Login or Signup to write a review!">
-              <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success disabled" role="button" aria-disabled="true">Review now</a></td>
-            </div>
-            {% endif %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </main>
-</body>
-<script>
-function tableSearch() {
-  // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("tableSearch");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("table");
-  tr = table.getElementsByTagName("tr");
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
+              {% else %}
+              <div data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-trigger="hover focus" data-bs-content="Login or Signup to write a review!">
+                <a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success disabled" role="button" aria-disabled="true">Review now</a></td>
+              </div>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </main>
+    </body>
+    <script>
+    function tableSearch() {
+      // Declare variables
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("tableSearch");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("table");
+      tr = table.getElementsByTagName("tr");
+      // Loop through all table rows, and hide those who don't match the search query
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
       }
     }
-  }
-}
-</script>
-{% include "djangoapp/scripts.html" %}
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script>
-var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-  return new bootstrap.Popover(popoverTriggerEl)
-})
+  </script>
+  {% include "djangoapp/scripts.html" %}
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script>
+  var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+  var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    return new bootstrap.Popover(popoverTriggerEl)
+  })
 </script>
 </html>

@@ -10,6 +10,7 @@
 <body>
   {% include "djangoapp/nav.html" %}
   <main class="container">
+    {% if user.is_authenticated %}
     <div class="row d-flex justify-content-center py-5">
       <div class="col-10 col-md-10 col-lg-6">
         <form action="" method="post" autocomplete="off">
@@ -33,20 +34,23 @@
           <div class="form-group pt-3" data-provide="datepicker">
             <label for="purchase_date">Select your purchase date:</label>
             <div class="input-group">
-            <input class="form-control datepicker_input" placeholder="DD/MM/YYYY" type="text" name="purchase_date" id="purchase_date">
-            <span class="input-group-append date-own">
-              <span class="input-group-text bg-white d-block">
-                <i class="fa fa-calendar"></i>
+              <input class="form-control datepicker_input" placeholder="DD/MM/YYYY" type="text" name="purchase_date" id="purchase_date">
+              <span class="input-group-append date-own">
+                <span class="input-group-text bg-white d-block">
+                  <i class="fa fa-calendar"></i>
+                </span>
               </span>
-            </span>
-          </DIV>
+            </DIV>
           </div>
           <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="submit" class="btn btn-primary mt-3">Submit</button>
-        </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+          </div>
         </form>
       </div>
     </div>
+    {% else %}
+    {% include "djangoapp/login_form_raw.html" %}
+    {% endif %}
   </main>
 </body>
 {% include "djangoapp/scripts.html" %}
@@ -59,5 +63,5 @@ for (const elem of elems) {
     'format': 'dd/mm/yyyy',
   });
 }
- </script>
+</script>
 </html>
