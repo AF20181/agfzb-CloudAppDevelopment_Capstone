@@ -49,7 +49,7 @@
           <td>{{dealer.address}}</td>
           <td>{{dealer.zip}}</td>
           <td><a href="{% url 'djangoapp:index' %}?state={{dealer.st}}">{{dealer.state}}</a></td>
-          <td class="text-center"><a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success {% if not user.is_authenticated %}disabled{% endif %}" role="button" {% if not user.is_authenticated %}title="Login or Signup to write a review!" aria-disabled="true"{% endif %}>Review now</a></td>
+          <td class="text-center"><a href="/djangoapp/review/{{dealer.id}}/" class="btn btn-success {% if not user.is_authenticated %}disabled{% endif %}" role="button" {% if not user.is_authenticated %} data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Login or Signup to write a review!" aria-disabled="true"{% endif %}>Review now</a></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -57,6 +57,11 @@
   </main>
 </body>
 <script>
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl)
+})
+
 function tableSearch() {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
@@ -79,4 +84,5 @@ function tableSearch() {
 }
 </script>
 {% include "djangoapp/scripts.html" %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 </html>
